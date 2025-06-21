@@ -8,16 +8,19 @@ function P1:new(name --[[str]], comments --[[str]], width --[[number]], height -
    self.comments = comments
    self.width = width
    self.height = height
+   self.img = ''
 
    return self
 end
 
-function P1:draw( mode --[[number: 0 or 1]], ...)
+function P1:draw( mode --[[number: 0 or 2]], ...)
+   local args --[[table]] = ...
    local str --[[str]] = ''
-   local w --[[int]] = self.width
-   
-   for i, value in ipairs(...) do
-      if i <= (self.width*self.height) then
+   local w --[[number]] = self.width
+   local size --[[number]] = (self.width*self.height)
+
+   for i, value in ipairs(args) do
+      if i <= size then
          if mode == 0 and type(value) == 'number' and (value == 0 or value == 1) then
             str = (str .. tostring(value))
             

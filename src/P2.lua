@@ -16,30 +16,36 @@ function P2:new(name --[[str]], comments --[[str]], width --[[number]], height -
    self.maxValue = maxValue -- max is 65536
    self.width = width
    self.height = height
+   self.img = ''
 
    return self
 end
 
 function P2:draw( mode --[[number: 0 or 1]], ...)
+   local args --[[table]] = ...
    local str --[[str]] = ''
-   local w --[[number]] = self.width
-   
-   for i, value in ipairs(...) do
-      if i <= (self.width*self.height) then
-         if mode == 0 and type(value) == 'number' and (value >=
-0 or value <= 65536) then
-            str = (str .. tostring(value) .. ' ')
+   local width --[[number]] = self.width
+   local size --[[number]] = (self.width*self.height)
 
-	    if i == self.height*self.width then
-               str = str .. '\r'
+   for i, value in ipairs(args) do
+      if i <= size then
+         if mode == 0 and type(value) == 'number' and (value >= 0 and value <= 65536) then
+            
+            if i < size then
+               str = (str .. tostring(value) .. ' ')
+            else
+               str = (str .. tostring(value))
             end
             
-         elseif mode == 1 and type(value) == 'number' and (value >= 0 or value <= 65536) then
-            str = (str .. tostring(value) .. ' ')
+         elseif mode == 1 and type(value) == 'number' and (value >= 0 and value <= 65536) then
             
-            if i == w and i ~= self.height*self.width then
-               str = str .. '\r\n'
-               w = w + self.width
+            if i ~= width then
+               str = (str .. tostring(value) .. ' ')
+            elseif i == width and i ~= size then
+               str = (str .. tostring(value) .. '\n')
+               width = width + self.width
+            else
+               str = (str .. tostring(value))
             end
             
          else
